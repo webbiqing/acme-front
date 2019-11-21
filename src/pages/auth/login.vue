@@ -21,39 +21,40 @@
         placeholder="请输入密码"
         required
       />
-  </van-cell-group>
-  <div style="margin: 20px 0; width: 100%;display:flex;justify-content: center;">
-    <van-button type="primary" style="width:70%" @click='login'>登 录</van-button>
-  </div>
+    </van-cell-group>
+    <div style="margin: 20px 0; width: 100%;display:flex;justify-content: center;">
+      <van-button type="primary" style="width:70%" @click='login'>登 录</van-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { Notify } from 'vant';
-import { login } from '@/api'
-export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      username: '',
-      password:'',
-    }
-  },
-  methods:{
-    async login(){
-      const { data } = await login({username:this.username,pwd:this.password});
-      console.log(data);
-      if(data == 909){
-          Notify({ type: 'danger', message: '用户名或者密码不正确' });
-        }else if(data == 606){
+  import {Notify} from 'vant';
+  import {login} from '@/api'
+
+  export default {
+    name: 'HelloWorld',
+    data() {
+      return {
+        username: '',
+        password: '',
+      }
+    },
+    methods: {
+      async login() {
+        const {data} = await login({username: this.username, pwd: this.password});
+        console.log(data);
+        if (data == 909) {
+          Notify({type: 'danger', message: '用户名或者密码不正确'});
+        } else if (data == 606) {
           this.$router.push('/main');
         }
+      }
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>
