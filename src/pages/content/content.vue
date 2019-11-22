@@ -44,32 +44,35 @@
       return {
         message: '',
         title: '',
-        categoryId: 1,
-        optionList: []
+        optionList: [],
+        categoryId:1
       }
     },
     mounted() {
       this.getCategory();
+      this.categoryId = this.$route.query.active || 1;
     },
     methods: {
       async sendData() {
         if (!this.message.trim() && !this.title.trim()) {
           return Notify({type: 'danger', message: '没点东西就想吐槽？'});
         }
-        const {serverStatus} = await saveLog({title: this.title, content: this.message, category: this.categoryId})
-        if (serverStatus === 2) {
+        const { data,code,message } = await saveLog({title: this.title, content: this.message, category: this.categoryId})
+        if (code === 200) {
           Toast.success('吐槽成功！');
           this.$router.push('/main')
         }
       },
       async getCategory() {
-        const result = await getCategory();
-        this.optionList = result.map(item => {
-          return {
-            text: item.name,
-            value: item.id
-          }
-        });
+        const {code,data,message} = await getCategory();
+        if(code === 200){
+          this.optionList = data.map(item => {
+            return {
+              text: item.name,
+              value: item.id
+            }
+          });
+        }
       },
     }
   }

@@ -42,12 +42,11 @@
     },
     methods: {
       async login() {
-        const {data} = await login({username: this.username, pwd: this.password});
-        console.log(data);
-        if (data == 909) {
-          Notify({type: 'danger', message: '用户名或者密码不正确'});
-        } else if (data == 606) {
+        const { data,code,message } = await login({username: this.username, pwd: this.password});
+        if (code === 200) {
           this.$router.push('/main');
+        } else{
+          Notify({type: 'danger', message: '用户名或者密码不正确'});
         }
       }
     }

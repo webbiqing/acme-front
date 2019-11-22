@@ -11,16 +11,19 @@ export default new Router({
     {
       path: '/',
       name: 'login',
+      meta:{title:'用户登录'},
       component: Login
     },
     {
       path: '/main',
       name: 'mainLayout',
+      meta:{title:'吐槽列表'},
       component: MainLayout
     },
     {
       path: '/content',
       name: 'content',
+      meta:{title:'新吐槽'},
       component: Content
     }
   ]
