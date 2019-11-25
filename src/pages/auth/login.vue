@@ -44,9 +44,8 @@
       async login() {
         const { data,code,message } = await login({username: this.username, pwd: this.password});
         if (code === 200) {
+          window.sessionStorage.token = data.token || '';
           this.$router.push('/main');
-        } else{
-          Notify({type: 'danger', message: '用户名或者密码不正确'});
         }
       }
     }
