@@ -1,7 +1,7 @@
 <template>
   <div class="hello-content">
     <div style="width: 100%;text-align: center;margin: 40px 0 40px 0;">
-      各位大佬，欢迎吐槽
+      各位大佬，欢迎注册
     </div>
     <van-cell-group>
       <van-field
@@ -9,9 +9,7 @@
         required
         clearable
         label="用户名"
-        right-icon="question-o"
         placeholder="请输入用户名"
-        @click-right-icon="$toast('用户名:wbqing,密码:wbqing')"
       />
 
       <van-field
@@ -22,20 +20,18 @@
         required
       />
     </van-cell-group>
-    <div class="login-footer" style="margin: 20px 0;">
-      <van-button type="primary" style="width:70%" @click='login'>登 录</van-button>
-    </div>
-    <div class="login-footer">
-      <van-button type="default" style="width:70%;margin-top: 10px" @click="$router.push('/register')">注 册</van-button>
+    <div class="register-footer">
+      <van-button type="primary" style="width:70%" @click='register'>注 册</van-button>
     </div>
   </div>
 </template>
 
 <script>
-  import {login} from '@/api'
+  import {register} from '@/api'
+  import {Notify, Toast} from 'vant';
 
   export default {
-    name: 'Login',
+    name: 'register',
     data() {
       return {
         username: '',
@@ -43,11 +39,11 @@
       }
     },
     methods: {
-      async login() {
-        const { data,code,message } = await login({username: this.username, pwd: this.password});
+      async register() {
+        const { data,code,message } = await register({username: this.username, pwd: this.password});
         if (code === 200) {
-          window.sessionStorage.token = data.token || '';
-          this.$router.push('/main');
+          Toast.success('注册成功，前往登录');
+          this.$router.push('/');
         }
       }
     }
@@ -55,8 +51,9 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .login-footer{
+<style lang="less" scoped>
+  .register-footer{
+    margin: 20px 0;
     width: 100%;
     display:flex;
     justify-content: center;

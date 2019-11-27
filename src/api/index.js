@@ -3,6 +3,8 @@ import fetch from '@/http/http'
 
 //登录
 export const login = (params) => fetch.fetchGet('/acme/api/login',params);
+//注册
+export const register = (params) => fetch.fetchPost('/acme/api/register',params);
 //新增吐槽
 export const saveLog = (params) => fetch.fetchPost('/acme/api/add-blog',params);
 //查询吐槽
