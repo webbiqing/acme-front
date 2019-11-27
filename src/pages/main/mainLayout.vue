@@ -29,7 +29,7 @@
             {{item.voters}} <span class="item-actions-text"> 赞同
           </span>
           </button>
-          <div class="content-item-info">
+          <div class="content-item-info" @click="showChat(item.id)">
             <van-icon name="chat-o" /> <span> 评论</span>
           </div>
         </div>
@@ -38,11 +38,19 @@
         </div>
       </div>
     </van-pull-refresh>
+    <Comment 
+      :show="show" 
+      :commentList="commentList"
+      ref="comment"
+      @handleClose="controllerShow"
+      @handleSubmit="listenhandleSubmit" />
   </div>
 </template>
 
 <script>
-  import {getLog, getCategory,setVoters} from '@/api';
+  import Comment from '@/components/comment'
+  import { getLog, getCategory, setVoters, saveComment, getComment } from '@/api';
+  import { Notify } from 'vant';
 
   export default {
     name: 'mainLayout',
@@ -52,10 +60,16 @@
         isLoading: false,
         categoryList: [],
         active: 1,
+        show: false, //控制评论弹层
+        logId: null, //当前展开评论吐槽id
+        commentList: [],//评论列表
       }
     },
     mounted() {
       this.getCategory();
+    },
+    components: {
+      Comment
     },
     methods: {
       /*获取数据*/
@@ -90,6 +104,43 @@
         const {data, code, message} = await setVoters({id});
         if (code === 200) {
           this.notRefreshGetData();
+        }
+      },
+      /* 点击评论 */
+      showChat(id) {
+        this.logId = id;
+        this.controllerShow(true);
+        this.queryComment(id);
+      },
+      /* 设置show*/
+      controllerShow(state) {
+        this.show = state;
+      },
+      /* 提交评论 */
+      async listenhandleSubmit(value) {
+        if(this.logId === null) {
+          return;
+        };
+        const params = {
+          blog_id: this.logId,
+          content: value
+        };
+        const { data, code, message } = await saveComment(params);
+        if(code === 200) {
+          Notify({ type: 'success', message: '评论成功' });
+          this.queryComment(this.logId);
+          this.$refs.comment.reset();
+        }else {
+          Notify({ type: 'danger', message });
+        }
+      },
+      /* 获取当前槽点下评论列表 */
+      async queryComment(commentId) {
+        const { data, code, message } = await getComment({ commentId }); 
+        if(code === 200) {
+          this.commentList = data;
+        }else {
+          Notify({ type: 'danger', message });
         }
       },
       toSetData() {

@@ -11,3 +11,7 @@ export const getLog = (params) => fetch.fetchGet('/acme/api/search-blog',params)
 export const getCategory = (params) => fetch.fetchGet('/acme/api/search-category',params);
 //点赞
 export const setVoters = (params) => fetch.fetchPost('/acme/api/voters',params);
+//新增评论
+export const saveComment = (params) => fetch.fetchPost('/acme/api/add-comment',params);
+//查询当前槽点下评论列表
+export const getComment = (params) => fetch.fetchGet('/acme/api/search-comment',params);
