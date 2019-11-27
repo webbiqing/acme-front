@@ -22,18 +22,20 @@
         required
       />
     </van-cell-group>
-    <div style="margin: 20px 0; width: 100%;display:flex;justify-content: center;">
+    <div class="login-footer" style="margin: 20px 0;">
       <van-button type="primary" style="width:70%" @click='login'>登 录</van-button>
+    </div>
+    <div class="login-footer">
+      <van-button type="default" style="width:70%;margin-top: 10px" @click="$router.push('/register')">注 册</van-button>
     </div>
   </div>
 </template>
 
 <script>
-  import {Notify} from 'vant';
   import {login} from '@/api'
 
   export default {
-    name: 'HelloWorld',
+    name: 'Login',
     data() {
       return {
         username: '',
@@ -54,5 +56,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .login-footer{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+  }
 </style>
