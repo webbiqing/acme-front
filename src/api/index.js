@@ -17,3 +17,5 @@ export const setVoters = (params) => fetch.fetchPost('/acme/api/voters',params);
 export const saveComment = (params) => fetch.fetchPost('/acme/api/add-comment',params);
 //查询当前槽点下评论列表
 export const getComment = (params) => fetch.fetchGet('/acme/api/search-comment',params);
+//评论点赞
+export const setCommentPrase = (params) => fetch.fetchPost('/acme/api/parse-comment',params);

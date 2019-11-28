@@ -46,17 +46,24 @@
       </div>
     </van-pull-refresh>
     <Comment 
+      v-if="show"
       :show="show" 
       :commentList="commentList"
+      :TotalCount="TotalCount"
+      :loading="loading"
+      :finished="finished"
       ref="comment"
       @handleClose="controllerShow"
+      @queryNext="listenqueryNext"
+      @setLoading="listensetLoading"
+      @handleParse="listenhandleParse"
       @handleSubmit="listenhandleSubmit" />
   </div>
 </template>
 
 <script>
   import Comment from '@/components/comment'
-  import { getLog, getCategory, setVoters, saveComment, getComment } from '@/api';
+  import { getLog, getCategory, setVoters, saveComment, getComment, setCommentPrase } from '@/api';
   import { Notify } from 'vant';
 
   export default {
@@ -70,6 +77,11 @@
         show: false, //控制评论弹层
         logId: null, //当前展开评论吐槽id
         commentList: [],//评论列表
+        TotalCount: 0,//当前展开评论的总条数
+        loading: false, //当前页数据是否加载完成
+        finished: false, //分页所有数据是否加载完成
+        pageIndex: 1, //当前页
+        pageSize: 20, //每页加载的条数
       }
     },
     mounted() {
@@ -113,14 +125,36 @@
           this.notRefreshGetData();
         }
       },
+      /* van-list 组件控制loading  （重新设置了v-model）*/
+      listensetLoading(value) {
+        this.loading = value;
+      },
       /* 点击评论 */
       showChat(id) {
         this.logId = id;
         this.controllerShow(true);
-        this.queryComment(id);
+        this.queryComment({
+          commentId: id,
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize
+        });
+      },
+      /* 下一页 */
+      listenqueryNext() {
+        const params = {
+          commentId: this.logId,
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize
+        }
+        this.queryComment(params);
       },
       /* 设置show*/
       controllerShow(state) {
+        if(!state) {
+          this.commentList = [];
+          this.pageIndex = 1;
+          this.TotalCount = 0;
+        }
         this.show = state;
       },
       /* 提交评论 */
@@ -135,19 +169,41 @@
         const { data, code, message } = await saveComment(params);
         if(code === 200) {
           Notify({ type: 'success', message: '评论成功' });
-          this.queryComment(this.logId);
+          this.queryComment({
+            commentId: this.logId,
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize
+          });
           this.$refs.comment.reset();
         }else {
           Notify({ type: 'danger', message });
         }
       },
       /* 获取当前槽点下评论列表 */
-      async queryComment(commentId) {
-        const { data, code, message } = await getComment({ commentId }); 
+      async queryComment(params={}) {
+        const { data, code, message } = await getComment(params); 
         if(code === 200) {
-          this.commentList = data;
+          const { Result, TotalCount } = data;
+          this.loading = false;
+          this.commentList = [
+            ...this.commentList,
+            ...Result
+          ];
+          this.TotalCount = TotalCount;
+          if(this.commentList.length >=  TotalCount) {
+            this.finished = true;
+            return;
+          }
+          this.pageIndex = this.pageIndex + 1;
         }else {
           Notify({ type: 'danger', message });
+        }
+      },
+      /* 点击评论点赞数 */
+      async listenhandleParse(commentId) {
+        const { data, code, message } = await setCommentPrase({ commentId }); 
+        if(code === 200) {
+          this.commentList.map(item => item.id === commentId ? item.prase_count += 1 : null)
         }
       },
       toSetData() {
