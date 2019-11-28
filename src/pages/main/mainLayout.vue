@@ -19,18 +19,18 @@
 
       <div class="content-item" v-for="(item,index) in dataList" :key='index'>
         <h3>{{item.title}}</h3>
-        <div>
+        <div class="content-text">
           {{item.content}}
         </div>
         <div class="content-item-actions">
           <button class="content-item-vebtn" @click="setVoters(item)">
             <span class="voter-icon-o"><van-icon name="good-job-o" size="22px" /> </span>
             <span class="voter-icon"> <van-icon name="good-job" color="#0084ff" size="22px" /></span>
-            {{item.voters}} <span class="item-actions-text"> 赞同
+            {{item.voters > 2000 ? '2000+' : item.voters}} <span class="item-actions-text"> 赞同
           </span>
           </button>
           <div class="content-item-info" @click="showChat(item.id)">
-            <van-icon name="chat-o" /> <span> 评论</span>
+            <van-icon name="chat-o" /> <span style="margin-left: 5px"> {{item.count}}条评论</span>
           </div>
         </div>
         <div>
@@ -173,9 +173,17 @@
     border-radius: 0;
     border-width: 1px 0;
     background: #fff;
+    .content-text{
+      word-break: break-word;
+      line-height: 1.6;
+      white-space: normal;
+      color: #1a1a1a;
+      -webkit-tap-highlight-color: rgba(26,26,26,0);
+    }
     h3{
       line-height: 1.4;
-      font-size: 20px;
+      font-size: 18px;
+      margin-bottom: 3px;
     }
     .content-item-actions{
       display: flex;
@@ -214,6 +222,7 @@
       align-items: center;
       margin-left: 10px;
       cursor: pointer;
+      color: #8590a6;
     }
   }
 </style>
