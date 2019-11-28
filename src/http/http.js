@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {Notify} from 'vant';
+import router from '../router'
 
 const service = axios.create({
    baseURL: process.env.BASE_URL
@@ -22,7 +23,8 @@ service.interceptors.response.use(
       Notify({type: 'danger', message: response.data.message});
     }else if(response.data.code === 401){
       Notify({type: 'danger', message: '认证信息认证失败，前往登录页面'});
-      this.$router.push('/login')
+      window.sessionStorage.token = '';
+      router.push('/')
     }
     return response
   },
