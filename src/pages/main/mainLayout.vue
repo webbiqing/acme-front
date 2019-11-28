@@ -30,7 +30,14 @@
           </span>
           </button>
           <div class="content-item-info" @click="showChat(item.id)">
-            <van-icon name="chat-o" /> <span style="margin-left: 5px"> {{item.count}}条评论</span>
+            <van-icon name="chat-o" /> <span style="margin-left: 5px">
+            <template v-if="item.count">
+              {{item.count}}条评论
+            </template>
+            <template v-else>
+              添加评论
+            </template>
+          </span>
           </div>
         </div>
         <div>
