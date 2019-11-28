@@ -111,10 +111,13 @@ export default {
           padding-bottom: 8px;
         }
         .comment-content {
+          width: 100%;
+          box-sizing: border-box;
           height: auto;
           font-size: 18px;
           color: #5f5e5e;
           padding-left: 10px;
+          word-wrap:break-word;
         }
         .comment-item-bottom {
           display: flex;
@@ -147,6 +150,7 @@ export default {
       padding: 10px 20px;
       box-sizing: border-box;
       border-top: 1px solid #ccc;
+      box-shadow: 0 0 5px #ccc;
       .comment-submit-input {
         width: 85%
       }
