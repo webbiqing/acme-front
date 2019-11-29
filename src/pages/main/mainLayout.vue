@@ -154,6 +154,7 @@
           this.commentList = [];
           this.pageIndex = 1;
           this.TotalCount = 0;
+          this.finished = false;
         }
         this.show = state;
       },

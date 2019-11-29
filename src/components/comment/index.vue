@@ -13,6 +13,7 @@
         v-model="popLoading"
         :immediate-check="false"
         :finished="popFinished"
+        :offset=600
         finished-text="大哥，真没有了！"
         @load="onLoad"
       >
@@ -35,22 +36,25 @@
       </van-list>
     </div>
     <div class="comment-submit-content">
-      <div class="comment-submit-input">
-        <van-field
-          v-model="message"
-          rows="4"
-          ref="myField"
-          :border="false"
-          autosize
-          maxlength="150"
-          show-word-limit
-          type="textarea"
-          placeholder="请输入评论"
-        />
+      <div class="comment-submit-name">回复给***</div>
+      <div class="comment-submit-input-box">
+        <div class="comment-submit-input">
+          <van-field
+            v-model="message"
+            rows="4"
+            ref="myField"
+            :border="false"
+            autosize
+            maxlength="150"
+            show-word-limit
+            type="textarea"
+            placeholder="请输入评论"
+          />
+        </div>
+        <div 
+          :class="`${message.length > 0 ? 'clo_0068dc' : 'clo_0068dc_opacity_5'}`"
+          @click="handleSubmit">发布</div>
       </div>
-      <div 
-        :class="`${message.length > 0 ? 'clo_0068dc' : 'clo_0068dc_opacity_5'}`"
-        @click="handleSubmit">发布</div>
     </div>
   </van-popup>
 </template>
@@ -201,10 +205,6 @@ export default {
       z-index: 999;
       bottom: 0;
       left: 0;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: flex-end;
       width: 100%;
       height: auto;
       background: #fff;
@@ -212,8 +212,18 @@ export default {
       box-sizing: border-box;
       border-top: 1px solid #ccc;
       box-shadow: 0 0 5px #ccc;
-      .comment-submit-input {
-        width: 85%
+      .comment-submit-name {
+        font-size: 16px;
+        color: #323233;
+      }
+      .comment-submit-input-box {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        .comment-submit-input {
+          width: 85%
+        }
       }
     }
   }
